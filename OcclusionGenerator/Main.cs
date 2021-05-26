@@ -79,6 +79,12 @@ namespace OcclusionGenerator {
                     MloInterior mloInterior = ParseXml.GetMloInterior(XDocItyp, XDocImap);
                     PortalInfoList portalInfoList = naOcclusionInteriorMetadata.GetPortalInfoList(mloInterior);
                     PathNodeList pathNodeList = naOcclusionInteriorMetadata.GetPathNodeList(portalInfoList, mloInterior);
+
+                    if (mloInterior.name.StartsWith("hash_") || mloInterior.Rooms.Any(room => room.name.StartsWith("hash_"))) {
+                        MessageBox.Show("CMloArchetypeDef, CMloInstanceDef, or CMloRoomDef had a hashed name! Real strings are required.", "Occlusion Generator", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
+
                     LogAction(">> Generated " + mloInterior.occlHash.occlusionHash + ".ymt.pso.xml");
 
                     naOcclusionInteriorMetadata.SavePsoXML(directory, mloInterior.occlHash.occlusionHash, portalInfoList, pathNodeList);
